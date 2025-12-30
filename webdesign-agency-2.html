@@ -1,0 +1,1955 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digitale Meisterwerke | Web Design Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-ink: #0a0a0a;
+            --color-paper: #fafaf8;
+            --color-accent: #c17836;
+            --color-muted: #6b6b6b;
+            --color-border: #e1e1dd;
+            --serif: 'Cormorant Garamond', serif;
+            --sans: 'Work Sans', sans-serif;
+            --transition-smooth: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-bounce: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--sans);
+            background: var(--color-paper);
+            color: var(--color-ink);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .nav-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(250, 250, 248, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--color-border);
+            transform: translateY(0);
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-wrapper.hidden {
+            transform: translateY(-100%);
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: var(--serif);
+            font-size: 1.8rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            color: var(--color-ink);
+            text-decoration: none;
+            position: relative;
+        }
+
+        .logo::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--color-accent);
+            transition: width 0.4s ease;
+        }
+
+        .logo:hover::after {
+            width: 100%;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--color-ink);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 400;
+            letter-spacing: 0.02em;
+            position: relative;
+            padding: 0.5rem 0;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 1px;
+            background: var(--color-accent);
+            transform: translateX(-50%);
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-links a:hover::before {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: var(--color-accent);
+        }
+
+        /* Dropdown Menu */
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-content {
+            position: absolute;
+            top: 100%;
+            left: -2rem;
+            background: var(--color-paper);
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            min-width: 280px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            margin-top: 1rem;
+        }
+
+        .dropdown:hover .dropdown-content {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-content a {
+            display: block;
+            padding: 1rem 1.5rem;
+            color: var(--color-ink);
+            text-decoration: none;
+            font-size: 0.9rem;
+            border-bottom: 1px solid var(--color-border);
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-content a:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-content a:hover {
+            background: rgba(193, 120, 54, 0.05);
+            padding-left: 2rem;
+            color: var(--color-accent);
+        }
+
+        .dropdown-content a::before {
+            display: none;
+        }
+
+        /* Nested Dropdown */
+        .dropdown-nested {
+            position: relative;
+        }
+
+        .dropdown-nested > a {
+            position: relative;
+        }
+
+        .dropdown-nested > a::after {
+            content: '→';
+            position: absolute;
+            right: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .dropdown-nested:hover > a::after {
+            transform: translateX(5px);
+        }
+
+        .dropdown-content-nested {
+            position: absolute;
+            left: 100%;
+            top: -1px;
+            background: var(--color-paper);
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            min-width: 240px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(-10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            margin-left: -1px;
+        }
+
+        .dropdown-nested:hover .dropdown-content-nested {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0);
+        }
+
+        .dropdown-content-nested a {
+            padding: 0.9rem 1.5rem;
+            font-size: 0.85rem;
+        }
+
+        .dropdown-content-nested a:hover {
+            padding-left: 2rem;
+        }
+
+        .cta-button {
+            background: var(--color-accent);
+            color: var(--color-paper);
+            padding: 0.8rem 2rem;
+            border-radius: 2px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+
+        .cta-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(193, 120, 54, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding: 6rem 3rem 3rem;
+        }
+
+        .hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0.03;
+            background: 
+                radial-gradient(circle at 20% 30%, var(--color-accent) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, var(--color-ink) 0%, transparent 50%);
+            animation: backgroundShift 20s ease-in-out infinite;
+        }
+
+        @keyframes backgroundShift {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(5deg); }
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-title {
+            font-family: var(--serif);
+            font-size: clamp(3rem, 8vw, 7rem);
+            font-weight: 300;
+            line-height: 1.1;
+            margin-bottom: 2rem;
+            letter-spacing: -0.03em;
+            opacity: 0;
+            transform: translateY(40px);
+            animation: fadeInUp 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.2s forwards;
+        }
+
+        .hero-title strong {
+            font-weight: 700;
+            color: var(--color-accent);
+            display: block;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 2vw, 1.4rem);
+            color: var(--color-muted);
+            margin-bottom: 3rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            opacity: 0;
+            transform: translateY(40px);
+            animation: fadeInUp 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.4s forwards;
+            font-weight: 300;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            opacity: 0;
+            transform: translateY(40px);
+            animation: fadeInUp 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.6s forwards;
+        }
+
+        .btn-primary, .btn-secondary {
+            padding: 1.2rem 3rem;
+            text-decoration: none;
+            border-radius: 2px;
+            font-weight: 500;
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--color-ink);
+            color: var(--color-paper);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(10, 10, 10, 0.2);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--color-ink);
+            border: 2px solid var(--color-ink);
+        }
+
+        .btn-secondary:hover {
+            background: var(--color-ink);
+            color: var(--color-paper);
+            transform: translateY(-3px);
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1px;
+            height: 60px;
+            background: linear-gradient(to bottom, transparent, var(--color-accent));
+            opacity: 0;
+            animation: fadeIn 1s ease 1.5s forwards, scrollFloat 2s ease-in-out infinite 2.5s;
+        }
+
+        @keyframes scrollFloat {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        /* Section Styles */
+        section {
+            padding: 8rem 3rem;
+            position: relative;
+            opacity: 0;
+            transform: translateY(60px);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .section-label {
+            font-size: 0.85rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--color-accent);
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .section-title {
+            font-family: var(--serif);
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .section-description {
+            font-size: 1.2rem;
+            color: var(--color-muted);
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        /* Services Grid */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+        }
+
+        .service-card {
+            background: var(--color-paper);
+            border: 1px solid var(--color-border);
+            padding: 3rem;
+            border-radius: 4px;
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--color-accent);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .service-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+        }
+
+        .service-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(193, 120, 54, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
+            font-size: 1.8rem;
+            transition: var(--transition-bounce);
+        }
+
+        .service-card:hover .service-icon {
+            transform: scale(1.1) rotate(10deg);
+            background: rgba(193, 120, 54, 0.2);
+        }
+
+        .service-title {
+            font-family: var(--serif);
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .service-description {
+            color: var(--color-muted);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .service-features {
+            list-style: none;
+            margin-top: 1.5rem;
+        }
+
+        .service-features li {
+            padding: 0.5rem 0;
+            color: var(--color-muted);
+            font-size: 0.95rem;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .service-features li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--color-accent);
+        }
+
+        /* Process Timeline */
+        .process-timeline {
+            max-width: 1100px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .process-timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--color-border);
+            transform: translateX(-50%);
+        }
+
+        .process-step {
+            display: flex;
+            margin-bottom: 4rem;
+            position: relative;
+            opacity: 0;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .process-step.visible {
+            opacity: 1;
+        }
+
+        .process-step:nth-child(odd) {
+            flex-direction: row;
+            transform: translateX(-40px);
+        }
+
+        .process-step:nth-child(even) {
+            flex-direction: row-reverse;
+            transform: translateX(40px);
+        }
+
+        .process-step.visible:nth-child(odd),
+        .process-step.visible:nth-child(even) {
+            transform: translateX(0);
+        }
+
+        .process-content {
+            flex: 1;
+            padding: 2rem;
+            background: var(--color-paper);
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            position: relative;
+            max-width: calc(50% - 80px);
+        }
+
+        .process-step:nth-child(odd) .process-content {
+            margin-right: 80px;
+            text-align: right;
+        }
+
+        .process-step:nth-child(even) .process-content {
+            margin-left: 80px;
+        }
+
+        .process-number {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background: var(--color-paper);
+            border: 3px solid var(--color-accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--serif);
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--color-accent);
+            z-index: 2;
+        }
+
+        .process-title {
+            font-family: var(--serif);
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+        }
+
+        .process-description {
+            color: var(--color-muted);
+            line-height: 1.8;
+        }
+
+        /* Portfolio Grid */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+        }
+
+        .portfolio-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 4px;
+            aspect-ratio: 16 / 10;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .portfolio-item:nth-child(2) {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .portfolio-item:nth-child(3) {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .portfolio-item:nth-child(4) {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        .portfolio-item:nth-child(5) {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+
+        .portfolio-item:nth-child(6) {
+            background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+        }
+
+        .portfolio-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(10, 10, 10, 0.85);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .portfolio-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .portfolio-item:hover .portfolio-overlay {
+            opacity: 1;
+        }
+
+        .portfolio-title {
+            font-family: var(--serif);
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--color-paper);
+            margin-bottom: 1rem;
+            transform: translateY(20px);
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.1s;
+        }
+
+        .portfolio-item:hover .portfolio-title {
+            transform: translateY(0);
+        }
+
+        .portfolio-description {
+            color: rgba(250, 250, 248, 0.8);
+            font-size: 1rem;
+            transform: translateY(20px);
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+        }
+
+        .portfolio-item:hover .portfolio-description {
+            transform: translateY(0);
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background: var(--color-ink);
+            color: var(--color-paper);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 4rem;
+            text-align: center;
+        }
+
+        .stat-item {
+            opacity: 0;
+            transform: scale(0.8);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .stat-item.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .stat-number {
+            font-family: var(--serif);
+            font-size: 4rem;
+            font-weight: 600;
+            color: var(--color-accent);
+            margin-bottom: 0.5rem;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            color: rgba(250, 250, 248, 0.7);
+            font-weight: 300;
+        }
+
+        /* Contact Section */
+        .contact-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .contact-card {
+            background: var(--color-paper);
+            border: 1px solid var(--color-border);
+            padding: 3rem 2rem;
+            border-radius: 4px;
+            text-align: center;
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--color-accent);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .contact-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .contact-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+        }
+
+        .contact-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(193, 120, 54, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+            transition: var(--transition-bounce);
+        }
+
+        .contact-card:hover .contact-icon {
+            transform: scale(1.1) rotate(10deg);
+            background: rgba(193, 120, 54, 0.2);
+        }
+
+        .contact-card-title {
+            font-family: var(--serif);
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-card-description {
+            color: var(--color-muted);
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .contact-link {
+            display: block;
+            color: var(--color-ink);
+            text-decoration: none;
+            padding: 0.5rem 0;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .contact-link:hover {
+            color: var(--color-accent);
+            transform: translateX(5px);
+        }
+
+        .contact-cta {
+            background: var(--color-ink);
+            color: var(--color-paper);
+            padding: 4rem 3rem;
+            border-radius: 4px;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .contact-cta-title {
+            font-family: var(--serif);
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .contact-cta-text {
+            color: rgba(250, 250, 248, 0.8);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--color-ink);
+            color: var(--color-paper);
+            padding: 5rem 3rem 3rem;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 4rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section h3 {
+            font-family: var(--serif);
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .footer-section p,
+        .footer-section a {
+            color: rgba(250, 250, 248, 0.7);
+            text-decoration: none;
+            line-height: 2;
+            display: block;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--color-accent);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 3rem;
+            border-top: 1px solid rgba(250, 250, 248, 0.1);
+            color: rgba(250, 250, 248, 0.5);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--color-ink);
+            cursor: pointer;
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            nav {
+                padding: 1.5rem 2rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .hero {
+                padding: 5rem 2rem 3rem;
+            }
+
+            section {
+                padding: 5rem 2rem;
+            }
+
+            .services-grid,
+            .portfolio-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .process-timeline::before {
+                left: 30px;
+            }
+
+            .process-step:nth-child(odd),
+            .process-step:nth-child(even) {
+                flex-direction: row;
+            }
+
+            .process-step:nth-child(odd) .process-content,
+            .process-step:nth-child(even) .process-content {
+                margin-left: 4rem;
+                margin-right: 0;
+                text-align: left;
+            }
+
+            .process-number {
+                left: 30px;
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
+        }
+
+        /* Scroll Animations */
+        @keyframes parallaxFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Additional decorative elements */
+        .decorative-line {
+            width: 100px;
+            height: 2px;
+            background: var(--color-accent);
+            margin: 2rem auto;
+        }
+
+        /* Portfolio Detail Sections */
+        .portfolio-detail {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .portfolio-detail-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .portfolio-detail-content {
+            display: grid;
+            gap: 4rem;
+        }
+
+        .portfolio-detail-images {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .portfolio-detail-image-large {
+            width: 100%;
+            aspect-ratio: 3 / 2;
+            background: var(--color-border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .portfolio-detail-image-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .portfolio-detail-image-small {
+            aspect-ratio: 3 / 2;
+            background: var(--color-border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .image-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(193, 120, 54, 0.1) 0%, rgba(193, 120, 54, 0.05) 100%);
+            color: var(--color-muted);
+            font-size: 0.9rem;
+            font-weight: 500;
+            border: 2px dashed var(--color-border);
+        }
+
+        .portfolio-detail-info {
+            display: grid;
+            gap: 3rem;
+        }
+
+        .portfolio-info-block h3 {
+            font-family: var(--serif);
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--color-ink);
+        }
+
+        .portfolio-info-block p {
+            color: var(--color-muted);
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+
+        @media (min-width: 968px) {
+            .portfolio-detail-content {
+                grid-template-columns: 1.5fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <div class="nav-wrapper">
+        <nav>
+            <a href="#" class="logo">Atelier Digital</a>
+            <button class="mobile-menu-toggle">☰</button>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li class="dropdown">
+                    <a href="#services">Leistungen</a>
+                    <div class="dropdown-content">
+                        <div class="dropdown-item dropdown-nested">
+                            <a href="#webdesign">Webdesign</a>
+                            <div class="dropdown-content-nested">
+                                <a href="#responsive-design">Responsive Design</a>
+                                <a href="#ux-ui">UX/UI Design</a>
+                                <a href="#prototyping">Prototyping</a>
+                                <a href="#redesign">Website Redesign</a>
+                            </div>
+                        </div>
+                        <div class="dropdown-item dropdown-nested">
+                            <a href="#entwicklung">Entwicklung</a>
+                            <div class="dropdown-content-nested">
+                                <a href="#frontend">Frontend Development</a>
+                                <a href="#backend">Backend Development</a>
+                                <a href="#cms">CMS Integration</a>
+                                <a href="#ecommerce">E-Commerce Lösungen</a>
+                            </div>
+                        </div>
+                        <a href="#branding">Branding</a>
+                        <div class="dropdown-item dropdown-nested">
+                            <a href="#wartung">Wartung & Support</a>
+                            <div class="dropdown-content-nested">
+                                <a href="#updates">Updates & Patches</a>
+                                <a href="#monitoring">Monitoring</a>
+                                <a href="#backup">Backup & Recovery</a>
+                            </div>
+                        </div>
+                        <a href="#beratung">Strategieberatung</a>
+                    </div>
+                </li>
+                <li class="dropdown">
+                    <a href="#process">Prozess</a>
+                    <div class="dropdown-content">
+                        <a href="#analyse">Analyse & Strategie</a>
+                        <a href="#konzept">Konzeption</a>
+                        <a href="#design">Design</a>
+                        <a href="#umsetzung">Entwicklung</a>
+                        <a href="#launch">Testing & Launch</a>
+                    </div>
+                </li>
+                <li class="dropdown">
+                    <a href="#portfolio">Portfolio</a>
+                    <div class="dropdown-content">
+                        <a href="#portfolio-hotel">Luxushotel Alpenblick</a>
+                        <a href="#portfolio-tech">Innovate Tech GmbH</a>
+                        <a href="#portfolio-artisan">Artisan Manufaktur</a>
+                        <a href="#portfolio-green">Green Future Initiative</a>
+                        <a href="#portfolio-architects">Urban Architects</a>
+                        <a href="#portfolio-restaurant">Gourmet Restaurant</a>
+                    </div>
+                </li>
+                <li class="dropdown">
+                    <a href="#about">Über uns</a>
+                    <div class="dropdown-content">
+                        <a href="#team">Unser Team</a>
+                        <a href="#philosophy">Philosophie</a>
+                        <a href="#awards">Auszeichnungen</a>
+                        <a href="#partner">Partner</a>
+                    </div>
+                </li>
+                <li><a href="#contact" class="cta-button">Kontakt</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-background"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">
+                Digitale Exzellenz
+                <strong>für Ihre Vision</strong>
+            </h1>
+            <p class="hero-subtitle">
+                Wir gestalten und entwickeln Webseiten, die nicht nur beeindrucken, sondern nachhaltig erfolgreich sind. Maßgeschneiderte digitale Lösungen mit höchstem Anspruch an Design und Funktionalität.
+            </p>
+            <div class="hero-buttons">
+                <a href="#contact" class="btn-primary">Projekt starten</a>
+                <a href="#portfolio" class="btn-secondary">Referenzen ansehen</a>
+            </div>
+        </div>
+        <div class="scroll-indicator"></div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-label">Unsere Expertise</div>
+                <h2 class="section-title">Leistungen mit Weitblick</h2>
+                <div class="decorative-line"></div>
+                <p class="section-description">
+                    Von der ersten Idee bis zur erfolgreichen Online-Präsenz begleiten wir Sie mit umfassendem Know-how und einem Gespür für außergewöhnliches Design.
+                </p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">⚡</div>
+                    <h3 class="service-title">Webdesign</h3>
+                    <p class="service-description">
+                        Zeitgemäße, ästhetische Designs, die Ihre Marke perfekt repräsentieren und Besucher zu Kunden machen.
+                    </p>
+                    <ul class="service-features">
+                        <li>Responsive Design für alle Geräte</li>
+                        <li>UX/UI-optimierte Benutzerführung</li>
+                        <li>Moderne Designsprache</li>
+                        <li>Barrierefreie Gestaltung</li>
+                    </ul>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">⚙</div>
+                    <h3 class="service-title">Entwicklung</h3>
+                    <p class="service-description">
+                        Technisch ausgefeilte Lösungen mit modernsten Technologien für Performance und Skalierbarkeit.
+                    </p>
+                    <ul class="service-features">
+                        <li>Custom CMS-Integration</li>
+                        <li>E-Commerce-Plattformen</li>
+                        <li>Progressive Web Apps</li>
+                        <li>API-Entwicklung & Integration</li>
+                    </ul>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">✦</div>
+                    <h3 class="service-title">Branding</h3>
+                    <p class="service-description">
+                        Durchdachte Markenidentität, die Wiedererkennungswert schafft und emotional verbindet.
+                    </p>
+                    <ul class="service-features">
+                        <li>Logo & Corporate Design</li>
+                        <li>Styleguides & Design Systems</li>
+                        <li>Typografie & Farbkonzepte</li>
+                        <li>Brand Storytelling</li>
+                    </ul>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">⚡</div>
+                    <h3 class="service-title">Performance-Optimierung</h3>
+                    <p class="service-description">
+                        Geschwindigkeit und Effizienz, die begeistern. Technische Exzellenz für messbare Erfolge.
+                    </p>
+                    <ul class="service-features">
+                        <li>Core Web Vitals Optimierung</li>
+                        <li>SEO-technische Verbesserung</li>
+                        <li>Ladezeit-Optimierung</li>
+                        <li>Analytics & Monitoring</li>
+                    </ul>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">⚡</div>
+                    <h3 class="service-title">Wartung & Support</h3>
+                    <p class="service-description">
+                        Kontinuierliche Betreuung und Updates, damit Ihre Webseite stets aktuell und sicher bleibt.
+                    </p>
+                    <ul class="service-features">
+                        <li>Regelmäßige Updates</li>
+                        <li>Sicherheits-Monitoring</li>
+                        <li>Content-Pflege</li>
+                        <li>Technischer Support</li>
+                    </ul>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">✦</div>
+                    <h3 class="service-title">Strategieberatung</h3>
+                    <p class="service-description">
+                        Fundierte Beratung für Ihre digitale Strategie mit dem Fokus auf nachhaltigen Erfolg.
+                    </p>
+                    <ul class="service-features">
+                        <li>Digitale Strategieentwicklung</li>
+                        <li>Conversion-Optimierung</li>
+                        <li>User Research & Testing</li>
+                        <li>Wettbewerbsanalyse</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Section -->
+    <section id="process" style="background: #f5f5f3;">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-label">Unser Vorgehen</div>
+                <h2 class="section-title">Von der Idee zum Erfolg</h2>
+                <div class="decorative-line"></div>
+                <p class="section-description">
+                    Ein strukturierter Prozess, der auf Transparenz, Qualität und Ihre individuellen Anforderungen ausgerichtet ist.
+                </p>
+            </div>
+            <div class="process-timeline">
+                <div class="process-step">
+                    <div class="process-content">
+                        <h3 class="process-title">Analyse & Strategie</h3>
+                        <p class="process-description">
+                            Wir analysieren Ihre Ziele, Zielgruppe und Wettbewerber, um eine fundierte digitale Strategie zu entwickeln, die Ihre Vision zum Leben erweckt.
+                        </p>
+                    </div>
+                    <div class="process-number">01</div>
+                </div>
+                <div class="process-step">
+                    <div class="process-content">
+                        <h3 class="process-title">Konzeption</h3>
+                        <p class="process-description">
+                            Gemeinsam entwickeln wir ein durchdachtes Konzept mit Sitemap, Wireframes und User Flows, das die optimale User Experience gewährleistet.
+                        </p>
+                    </div>
+                    <div class="process-number">02</div>
+                </div>
+                <div class="process-step">
+                    <div class="process-content">
+                        <h3 class="process-title">Design</h3>
+                        <p class="process-description">
+                            In dieser Phase entsteht das visuelle Erscheinungsbild Ihrer Webseite. Jedes Detail wird sorgfältig gestaltet, um Ihre Marke perfekt zu repräsentieren.
+                        </p>
+                    </div>
+                    <div class="process-number">03</div>
+                </div>
+                <div class="process-step">
+                    <div class="process-content">
+                        <h3 class="process-title">Entwicklung</h3>
+                        <p class="process-description">
+                            Unser Entwicklerteam setzt das Design mit modernsten Technologien um. Performance, Sicherheit und Skalierbarkeit stehen dabei im Fokus.
+                        </p>
+                    </div>
+                    <div class="process-number">04</div>
+                </div>
+                <div class="process-step">
+                    <div class="process-content">
+                        <h3 class="process-title">Testing & Launch</h3>
+                        <p class="process-description">
+                            Umfangreiche Tests garantieren eine fehlerfreie Funktionalität. Nach Ihrer Freigabe erfolgt der Launch und Ihre Webseite geht erfolgreich online.
+                        </p>
+                    </div>
+                    <div class="process-number">05</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-label">Unsere Projekte</div>
+                <h2 class="section-title">Ausgewählte Arbeiten</h2>
+                <div class="decorative-line"></div>
+                <p class="section-description">
+                    Jedes Projekt ist einzigartig. Entdecken Sie eine Auswahl unserer erfolgreich realisierten Webprojekte.
+                </p>
+            </div>
+            <div class="portfolio-grid">
+                <div class="portfolio-item">
+                    <div class="portfolio-overlay">
+                        <h3 class="portfolio-title">Luxushotel Alpenblick</h3>
+                        <p class="portfolio-description">Elegante Buchungsplattform mit Virtual Tours</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-overlay">
+                        <h3 class="portfolio-title">Innovate Tech GmbH</h3>
+                        <p class="portfolio-description">Corporate Website mit interaktivem Produktkatalog</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-overlay">
+                        <h3 class="portfolio-title">Artisan Manufaktur</h3>
+                        <p class="portfolio-description">E-Commerce-Plattform für handgefertigte Produkte</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-overlay">
+                        <h3 class="portfolio-title">Green Future Initiative</h3>
+                        <p class="portfolio-description">Non-Profit-Website mit Spendenintegration</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-overlay">
+                        <h3 class="portfolio-title">Urban Architects</h3>
+                        <p class="portfolio-description">Portfolio-Website mit 3D-Visualisierungen</p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-overlay">
+                        <h3 class="portfolio-title">Gourmet Restaurant Essence</h3>
+                        <p class="portfolio-description">Reservierungssystem mit dynamischer Speisekarte</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Detail Sections -->
+    <section id="portfolio-hotel" style="background: #f5f5f3;">
+        <div class="section-container">
+            <div class="portfolio-detail">
+                <div class="portfolio-detail-header">
+                    <div class="section-label">Projekt Details</div>
+                    <h2 class="section-title">Luxushotel Alpenblick</h2>
+                    <div class="decorative-line"></div>
+                    <p class="section-description">
+                        Eine elegante Buchungsplattform mit integrierten Virtual Tours für ein führendes Luxushotel in den Alpen.
+                    </p>
+                </div>
+                <div class="portfolio-detail-content">
+                    <div class="portfolio-detail-images">
+                        <div class="portfolio-detail-image-large">
+                            <div class="image-placeholder">Hauptbild (1200x800px)</div>
+                        </div>
+                        <div class="portfolio-detail-image-grid">
+                            <div class="portfolio-detail-image-small">
+                                <div class="image-placeholder">Detail 1 (600x400px)</div>
+                            </div>
+                            <div class="portfolio-detail-image-small">
+                                <div class="image-placeholder">Detail 2 (600x400px)</div>
+                            </div>
+                            <div class="portfolio-detail-image-small">
+                                <div class="image-placeholder">Detail 3 (600x400px)</div>
+                            </div>
+                            <div class="portfolio-detail-image-small">
+                                <div class="image-placeholder">Detail 4 (600x400px)</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="portfolio-detail-info">
+                        <div class="portfolio-info-block">
+                            <h3>Herausforderung</h3>
+                            <p>Das Hotel benötigte eine moderne, mehrsprachige Buchungsplattform mit Virtual Tour Integration und nahtloser Anbindung an ihr Reservierungssystem.</p>
+                        </div>
+                        <div class="portfolio-info-block">
+                            <h3>Lösung</h3>
+                            <p>Wir entwickelten eine elegante Webseite mit 360°-Touren, Real-Time-Verfügbarkeit und einem intuitiven Buchungsprozess.</p>
+                        </div>
+                        <div class="portfolio-info-block">
+                            <h3>Technologien</h3>
+                            <p>React, Node.js, MongoDB, 360° Virtual Tour Integration, Payment Gateway</p>
+                        </div>
+                        <div class="portfolio-info-block">
+                            <h3>Ergebnis</h3>
+                            <p>45% Steigerung der Online-Buchungen innerhalb der ersten drei Monate nach Launch.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="portfolio-tech">
+        <div class="section-container">
+            <div class="portfolio-detail">
+                <div class="portfolio-detail-header">
+                    <div class="section-label">Projekt Details</div>
+                    <h2 class="section-title">Innovate Tech GmbH</h2>
+                    <div class="decorative-line"></div>
+                    <p class="section-description">
+                        Corporate Website mit interaktivem Produktkatalog und dynamischen Konfigurator für innovative Technologielösungen.
+                    </p>
+                </div>
+                <div class="portfolio-detail-content">
+                    <div class="portfolio-detail-images">
+                        <div class="portfolio-detail-image-large">
+                            <div class="image-placeholder">Hauptbild (1200x800px)</div>
+                        </div>
+                        <div class="portfolio-detail-image-grid">
+                            <div class="portfolio-detail-image-small">
+                                <div class="image-placeholder">Detail 1 (600x400px)</div>
+                            </div>
+                            <div class="portfolio-detail-image-small">
+                                <div class="image-placeholder">Detail 2 (600x400px)</div>
+                            </div>
+                            <div class="portfolio-detail-image-small">
+                                <div class="image-placeholder">Detail 3 (600x400px)</div>
+                            </div>
+                            <div class="portfolio-detail-image-small">
+                                <div class="image-placeholder">Detail 4 (600x400px)</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="portfolio-detail-info">
+                        <div class="portfolio-info-block">
+                            <h3>Herausforderung</h3>
+                            <p>Das Technologieunternehmen brauchte eine professionelle Online-Präsenz mit komplexem Produktkonfigurator.</p>
+                        </div>
+                        <div class="portfolio-info-block">
+                            <h3>Lösung</h3>
+                            <p>Eine moderne Corporate-Website mit interaktivem 3D-Produktkonfigurator und CMS-Integration.</p>
+                        </div>
+                        <div class="portfolio-info-block">
+                            <h3>Technologien</h3>
+                            <p>Vue.js, Three.js, Headless CMS, REST API</p>
+                        </div>
+                        <div class="portfolio-info-block">
+                            <h3>Ergebnis</h3>
+                            <p>Deutlich verbesserte Lead-Generierung und 60% mehr qualifizierte Anfragen.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="portfolio-artisan" style="background: #f5f5f3;">
+        <div class="section-container">
+            <div class="portfolio-detail">
+                <div class="portfolio-detail-header">
+                    <div class="section-label">Projekt Details</div>
+                    <h2 class="section-title">Artisan Manufaktur</h2>
+                    <div class="decorative-line"></div>
+                    <p class="section-description">
+                        E-Commerce-Plattform für handgefertigte Produkte mit Storytelling-Fokus und personalisierten Produktoptionen.
+                    </p>
+                </div>
+                <div class="portfolio-detail-content">
+                    <div class="portfolio-detail-images">
+                        <div class="portfolio-detail-image-large">
+                            <div class="image-placeholder">Hauptbild (1200x800px)</div>
+                        </div>
+                        <div class="portfolio-detail-image-grid">
+                            <div class="portfolio-detail-image-small">
+                                <div class="image-placeholder">Detail 1 (600x400px)</div>
+                            </div>
+                            <div class="portfolio-detail-image-small">
+                                <div class="image-placeholder">Detail 2 (600x400px)</div>
+                            </div>
+                            <div class="portfolio-detail-image-small">
+                                <div class="image-placeholder">Detail 3 (600x400px)</div>
+                            </div>
+                            <div class="portfolio-detail-image-small">
+                                <div class="image-placeholder">Detail 4 (600x400px)</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="portfolio-detail-info">
+                        <div class="portfolio-info-block">
+                            <h3>Herausforderung</h3>
+                            <p>Eine traditionelle Manufaktur wollte ihre handgefertigten Produkte online verkaufen, ohne den persönlichen Touch zu verlieren.</p>
+                        </div>
+                        <div class="portfolio-info-block">
+                            <h3>Lösung</h3>
+                            <p>E-Commerce-Plattform mit Behind-the-Scenes-Content, Handwerker-Profilen und individuellen Personalisierungsoptionen.</p>
+                        </div>
+                        <div class="portfolio-info-block">
+                            <h3>Technologien</h3>
+                            <p>WooCommerce, WordPress, Custom Product Configurator, Stripe Integration</p>
+                        </div>
+                        <div class="portfolio-info-block">
+                            <h3>Ergebnis</h3>
+                            <p>Erfolgreicher Online-Kanal mit 40% des Gesamtumsatzes nach sechs Monaten.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="portfolio-green">
+        <div class="section-container">
+            <div class="portfolio-detail">
+                <div class="portfolio-detail-header">
+                    <div class="section-label">Projekt Details</div>
+                    <h2 class="section-title">Green Future Initiative</h2>
+                    <div class="decorative-line"></div>
+                    <p class="section-description">
+                        Non-Profit-Website mit integrierten Spendenformularen und Impact-Tracking für Umweltschutzprojekte.
+                    </p>
+                </div>
+                <div class="portfolio-detail-content">
+                    <div class="portfolio-detail-images">
+                        <div class="portfolio-detail-image-large">
+                            <div class="image-placeholder">Hauptbild (1200x800px)</div>
+                        </div>
+                        <div class="portfolio-detail-image-grid">
+                            <div class="portfolio-detail-image-small">
+                                <div class="image-placeholder">Detail 1 (600x400px)</div>
+                            </div>
+                            <div class="portfolio-detail-image-small">
+                                <div class="image-placeholder">Detail 2 (600x400px)</div>
+                            </div>
+                            <div class="portfolio-detail-image-small">
+                                <div class="image-placeholder">Detail 3 (600x400px)</div>
+                            </div>
+                            <div class="portfolio-detail-image-small">
+                                <div class="image-placeholder">Detail 4 (600x400px)</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="portfolio-detail-info">
+                        <div class="portfolio-info-block">
+                            <h3>Herausforderung</h3>
+                            <p>Die NGO benötigte eine transparente Plattform zur Spendengenerierung mit Impact-Visualisierung.</p>
+                        </div>
+                        <div class="portfolio-info-block">
+                            <h3>Lösung</h3>
+                            <p>Emotionale Website mit Live-Spendentracking, Projektfortschritt und Social-Media-Integration.</p>
+                        </div>
+                        <div class="portfolio-info-block">
+                            <h3>Technologien</h3>
+                            <p>React, Node.js, PayPal/Stripe Integration, Chart.js für Visualisierungen</p>
+                        </div>
+                        <div class="portfolio-info-block">
+                            <h3>Ergebnis</h3>
+                            <p>Verdreifachung der monatlichen Spenden und deutlich höheres Engagement.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="portfolio-architects" style="background: #f5f5f3;">
+        <div class="section-container">
+            <div class="portfolio-detail">
+                <div class="portfolio-detail-header">
+                    <div class="section-label">Projekt Details</div>
+                    <h2 class="section-title">Urban Architects</h2>
+                    <div class="decorative-line"></div>
+                    <p class="section-description">
+                        Portfolio-Website mit beeindruckenden 3D-Visualisierungen und interaktiven Projektpräsentationen.
+                    </p>
+                </div>
+                <div class="portfolio-detail-content">
+                    <div class="portfolio-detail-images">
+                        <div class="portfolio-detail-image-large">
+                            <div class="image-placeholder">Hauptbild (1200x800px)</div>
+                        </div>
+                        <div class="portfolio-detail-image-grid">
+                            <div class="portfolio-detail-image-small">
+                                <div class="image-placeholder">Detail 1 (600x400px)</div>
+                            </div>
+                            <div class="portfolio-detail-image-small">
+                                <div class="image-placeholder">Detail 2 (600x400px)</div>
+                            </div>
+                            <div class="portfolio-detail-image-small">
+                                <div class="image-placeholder">Detail 3 (600x400px)</div>
+                            </div>
+                            <div class="portfolio-detail-image-small">
+                                <div class="image-placeholder">Detail 4 (600x400px)</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="portfolio-detail-info">
+                        <div class="portfolio-info-block">
+                            <h3>Herausforderung</h3>
+                            <p>Ein renommiertes Architekturbüro wollte ihre Projekte visuell beeindruckend präsentieren.</p>
+                        </div>
+                        <div class="portfolio-info-block">
+                            <h3>Lösung</h3>
+                            <p>Hochwertige Portfolio-Website mit 3D-Modell-Integration und interaktiven Grundrissen.</p>
+                        </div>
+                        <div class="portfolio-info-block">
+                            <h3>Technologien</h3>
+                            <p>Next.js, Three.js, WebGL, Custom CMS für Projektmanagement</p>
+                        </div>
+                        <div class="portfolio-info-block">
+                            <h3>Ergebnis</h3>
+                            <p>Internationale Anerkennung und Akquise von Großprojekten durch beeindruckende Online-Präsenz.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="portfolio-restaurant">
+        <div class="section-container">
+            <div class="portfolio-detail">
+                <div class="portfolio-detail-header">
+                    <div class="section-label">Projekt Details</div>
+                    <h2 class="section-title">Gourmet Restaurant Essence</h2>
+                    <div class="decorative-line"></div>
+                    <p class="section-description">
+                        Elegantes Reservierungssystem mit dynamischer Speisekarte und nahtloser Tischbuchung.
+                    </p>
+                </div>
+                <div class="portfolio-detail-content">
+                    <div class="portfolio-detail-images">
+                        <div class="portfolio-detail-image-large">
+                            <div class="image-placeholder">Hauptbild (1200x800px)</div>
+                        </div>
+                        <div class="portfolio-detail-image-grid">
+                            <div class="portfolio-detail-image-small">
+                                <div class="image-placeholder">Detail 1 (600x400px)</div>
+                            </div>
+                            <div class="portfolio-detail-image-small">
+                                <div class="image-placeholder">Detail 2 (600x400px)</div>
+                            </div>
+                            <div class="portfolio-detail-image-small">
+                                <div class="image-placeholder">Detail 3 (600x400px)</div>
+                            </div>
+                            <div class="portfolio-detail-image-small">
+                                <div class="image-placeholder">Detail 4 (600x400px)</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="portfolio-detail-info">
+                        <div class="portfolio-info-block">
+                            <h3>Herausforderung</h3>
+                            <p>Das Sternerestaurant benötigte ein modernes Reservierungssystem mit tagesaktueller Menüdarstellung.</p>
+                        </div>
+                        <div class="portfolio-info-block">
+                            <h3>Lösung</h3>
+                            <p>Luxuriöse Website mit Echtzeit-Reservierung, saisonaler Speisekarte und Event-Management.</p>
+                        </div>
+                        <div class="portfolio-info-block">
+                            <h3>Technologien</h3>
+                            <p>React, Firebase, Restaurant-Management-System API, Google Maps Integration</p>
+                        </div>
+                        <div class="portfolio-info-block">
+                            <h3>Ergebnis</h3>
+                            <p>90% Reduzierung telefonischer Reservierungen und vollständige Auslastung durch optimiertes System.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="section-container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number" data-target="150">0</div>
+                    <div class="stat-label">Erfolgreich realisierte Projekte</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-target="98">0</div>
+                    <div class="stat-label">Kundenzufriedenheit in Prozent</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-target="12">0</div>
+                    <div class="stat-label">Jahre Erfahrung im Webdesign</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-target="24">0</div>
+                    <div class="stat-label">Support & Verfügbarkeit</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <div class="section-container">
+            <div class="section-header">
+                <div class="section-label">Kontakt aufnehmen</div>
+                <h2 class="section-title">Lassen Sie uns sprechen</h2>
+                <div class="decorative-line"></div>
+                <p class="section-description">
+                    Haben Sie ein spannendes Projekt im Kopf? Wir freuen uns darauf, von Ihnen zu hören und gemeinsam etwas Großartiges zu schaffen.
+                </p>
+            </div>
+            <div class="contact-cards">
+                <div class="contact-card">
+                    <div class="contact-icon">✉</div>
+                    <h3 class="contact-card-title">E-Mail</h3>
+                    <p class="contact-card-description">Schreiben Sie uns direkt</p>
+                    <a href="mailto:info@atelier-digital.de" class="contact-link">info@atelier-digital.de</a>
+                    <a href="mailto:kontakt@atelier-digital.de" class="contact-link">kontakt@atelier-digital.de</a>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon">☎</div>
+                    <h3 class="contact-card-title">Telefon</h3>
+                    <p class="contact-card-description">Rufen Sie uns an</p>
+                    <a href="tel:+491234567890" class="contact-link">+49 (0) 123 456 7890</a>
+                    <a href="tel:+491234567891" class="contact-link">+49 (0) 123 456 7891</a>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon">⚲</div>
+                    <h3 class="contact-card-title">Adresse</h3>
+                    <p class="contact-card-description">Besuchen Sie uns</p>
+                    <a href="https://maps.google.com" target="_blank" class="contact-link">
+                        Musterstraße 123<br>
+                        12345 Musterstadt<br>
+                        Deutschland
+                    </a>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon">⚡</div>
+                    <h3 class="contact-card-title">Social Media</h3>
+                    <p class="contact-card-description">Folgen Sie uns</p>
+                    <a href="#" class="contact-link">LinkedIn</a>
+                    <a href="#" class="contact-link">Instagram</a>
+                    <a href="#" class="contact-link">Behance</a>
+                </div>
+            </div>
+            <div class="contact-cta">
+                <h3 class="contact-cta-title">Bereit für Ihr Projekt?</h3>
+                <p class="contact-cta-text">Vereinbaren Sie ein kostenloses Erstgespräch und lassen Sie uns über Ihre Ideen sprechen.</p>
+                <a href="mailto:info@atelier-digital.de?subject=Projektanfrage" class="btn-primary">Erstgespräch vereinbaren</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>Atelier Digital</h3>
+                <p>Ihr Partner für professionelle Webentwicklung und digitales Design. Wir verwandeln Visionen in digitale Realität.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Services</h3>
+                <a href="#webdesign">Webdesign</a>
+                <a href="#entwicklung">Entwicklung</a>
+                <a href="#branding">Branding</a>
+                <a href="#wartung">Wartung</a>
+            </div>
+            <div class="footer-section">
+                <h3>Unternehmen</h3>
+                <a href="#about">Über uns</a>
+                <a href="#portfolio">Portfolio</a>
+                <a href="#process">Prozess</a>
+                <a href="#contact">Kontakt</a>
+            </div>
+            <div class="footer-section">
+                <h3>Kontakt</h3>
+                <p>info@atelier-digital.de</p>
+                <p>+49 (0) 123 456 7890</p>
+                <p>Musterstraße 123<br>12345 Musterstadt</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 Atelier Digital. Alle Rechte vorbehalten. | Impressum | Datenschutz</p>
+        </div>
+    </footer>
+
+    <script>
+        // Navigation hide on scroll
+        let lastScroll = 0;
+        const nav = document.querySelector('.nav-wrapper');
+        
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > lastScroll && currentScroll > 100) {
+                nav.classList.add('hidden');
+            } else {
+                nav.classList.remove('hidden');
+            }
+            
+            lastScroll = currentScroll;
+        });
+
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Observe process steps
+        document.querySelectorAll('.process-step').forEach(step => {
+            observer.observe(step);
+        });
+
+        // Observe stat items
+        document.querySelectorAll('.stat-item').forEach(stat => {
+            observer.observe(stat);
+        });
+
+        // Counter animation for stats
+        const animateCounter = (element) => {
+            const target = parseInt(element.getAttribute('data-target'));
+            const duration = 2000;
+            const increment = target / (duration / 16);
+            let current = 0;
+
+            const updateCounter = () => {
+                current += increment;
+                if (current < target) {
+                    element.textContent = Math.floor(current);
+                    requestAnimationFrame(updateCounter);
+                } else {
+                    element.textContent = target;
+                }
+            };
+
+            updateCounter();
+        };
+
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const number = entry.target.querySelector('.stat-number');
+                    if (number && !number.classList.contains('animated')) {
+                        number.classList.add('animated');
+                        animateCounter(number);
+                    }
+                }
+            });
+        }, { threshold: 0.5 });
+
+        document.querySelectorAll('.stat-item').forEach(stat => {
+            statsObserver.observe(stat);
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Parallax effect for hero background
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const heroBackground = document.querySelector('.hero-background');
+            if (heroBackground) {
+                heroBackground.style.transform = `translateY(${scrolled * 0.5}px)`;
+            }
+        });
+
+        // Add stagger animation to service cards
+        const serviceCards = document.querySelectorAll('.service-card');
+        serviceCards.forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
+        });
+
+        const servicesObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    serviceCards.forEach((card) => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    });
+                }
+            });
+        }, { threshold: 0.2 });
+
+        const servicesSection = document.querySelector('#services');
+        if (servicesSection) {
+            servicesObserver.observe(servicesSection);
+        }
+    </script>
+</body>
+</html>
